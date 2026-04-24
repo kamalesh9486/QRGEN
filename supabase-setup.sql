@@ -1,4 +1,6 @@
--- Run this in Supabase SQL Editor (https://supabase.com → SQL Editor)
+-- ─────────────────────────────────────────────────────────────────────────────
+-- FRESH INSTALL — run this if you have no table yet
+-- ─────────────────────────────────────────────────────────────────────────────
 
 create table if not exists training_entries (
   id          uuid         primary key default gen_random_uuid(),
@@ -6,26 +8,25 @@ create table if not exists training_entries (
   title       text         not null,
   trainer     text         not null,
   date        text         not null,
+  time        text,
   venue       text,
   notes       text,
   full_url    text         not null,
   created_at  timestamptz  not null default now()
 );
 
--- Enable Row Level Security
 alter table training_entries enable row level security;
 
--- Allow anonymous users to read all entries
-create policy "anon_read" on training_entries
-  for select using (true);
+create policy "anon_read"   on training_entries for select using (true);
+create policy "anon_insert" on training_entries for insert with check (true);
+create policy "anon_delete" on training_entries for delete using (true);
 
--- Allow anonymous users to insert
-create policy "anon_insert" on training_entries
-  for insert with check (true);
-
--- Allow anonymous users to delete
-create policy "anon_delete" on training_entries
-  for delete using (true);
-
--- Enable real-time for live updates in History tab
 alter publication supabase_realtime add table training_entries;
+
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- EXISTING TABLE MIGRATION — run this if you deployed before the time field
+-- was added (skip if doing a fresh install above)
+-- ─────────────────────────────────────────────────────────────────────────────
+
+-- alter table training_entries add column if not exists time text;

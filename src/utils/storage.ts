@@ -3,8 +3,6 @@ import { supabase } from './supabase'
 
 const LS_KEY = 'qr_training_entries'
 
-// ── localStorage helpers ──────────────────────────────────────────────────────
-
 function lsLoad(): TrainingEntry[] {
   try {
     return JSON.parse(localStorage.getItem(LS_KEY) ?? '[]') as TrainingEntry[]
@@ -16,8 +14,6 @@ function lsLoad(): TrainingEntry[] {
 function lsSave(entries: TrainingEntry[]): void {
   localStorage.setItem(LS_KEY, JSON.stringify(entries))
 }
-
-// ── Public API (always async) ─────────────────────────────────────────────────
 
 export async function loadEntries(): Promise<TrainingEntry[]> {
   if (!supabase) return lsLoad()
@@ -36,6 +32,7 @@ export async function loadEntries(): Promise<TrainingEntry[]> {
       title: r.title as string,
       trainer: r.trainer as string,
       date: r.date as string,
+      time: (r.time as string) ?? '',
       venue: (r.venue as string) ?? '',
       notes: (r.notes as string) ?? '',
       fullUrl: r.full_url as string,
@@ -43,15 +40,12 @@ export async function loadEntries(): Promise<TrainingEntry[]> {
     }),
   )
 
-  // Keep local cache in sync
   lsSave(entries)
   return entries
 }
 
 export async function saveEntry(entry: TrainingEntry): Promise<void> {
-  // Always write to localStorage first (instant, offline-safe)
-  const all = lsLoad()
-  lsSave([...all, entry])
+  lsSave([...lsLoad(), entry])
 
   if (!supabase) return
 
@@ -61,6 +55,7 @@ export async function saveEntry(entry: TrainingEntry): Promise<void> {
     title: entry.title,
     trainer: entry.trainer,
     date: entry.date,
+    time: entry.time,
     venue: entry.venue,
     notes: entry.notes,
     full_url: entry.fullUrl,
@@ -70,9 +65,7 @@ export async function saveEntry(entry: TrainingEntry): Promise<void> {
 
 export async function deleteEntry(id: string): Promise<void> {
   lsSave(lsLoad().filter((e) => e.id !== id))
-
   if (!supabase) return
-
   await supabase.from('training_entries').delete().eq('id', id)
 }
 

@@ -1,19 +1,13 @@
 .qr-display {
   display: flex;
-  gap: 32px;
+  gap: 28px;
   align-items: flex-start;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 28px;
-  margin-top: 24px;
-}
-
-@media (max-width: 600px) {
-  .qr-display {
-    flex-direction: column;
-    align-items: center;
-  }
+  padding: clamp(16px, 4vw, 28px);
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .qr-code-wrap {
@@ -22,14 +16,29 @@
   background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  align-self: center;
+}
+
+/* QR canvas scales down on very small screens */
+.qr-code-wrap canvas {
+  display: block;
+  max-width: 100%;
+  height: auto !important;
+}
+
+@media (max-width: 420px) {
+  .qr-code-wrap canvas {
+    width: 160px !important;
+    height: 160px !important;
+  }
 }
 
 .qr-meta {
   flex: 1;
+  min-width: 220px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  min-width: 0;
+  gap: 12px;
 }
 
 .qr-code-badge {
@@ -38,7 +47,7 @@
   gap: 6px;
   background: var(--green-light);
   color: var(--green-dark);
-  font-size: 18px;
+  font-size: clamp(14px, 3vw, 18px);
   font-weight: 700;
   padding: 6px 14px;
   border-radius: var(--radius);
@@ -46,21 +55,23 @@
   font-family: var(--font-mono);
   border: 1px solid #b2d8cc;
   width: fit-content;
+  word-break: break-all;
 }
 
-.qr-info-row {
-  display: flex;
-  gap: 8px;
+.qr-info-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
   align-items: baseline;
 }
 
 .qr-label {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  min-width: 56px;
+  white-space: nowrap;
 }
 
 .qr-value {
@@ -74,11 +85,10 @@
   border-radius: var(--radius);
   padding: 8px 12px;
   overflow: hidden;
-  margin-top: 4px;
 }
 
 .qr-url-text {
-  font-size: 11px;
+  font-size: 10px;
   font-family: var(--font-mono);
   color: var(--text-muted);
   word-break: break-all;
@@ -88,22 +98,30 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 8px;
   align-items: center;
 }
 
-.btn-primary {
+/* ── Shared button base ────────────────────────────────── */
+.btn-primary,
+.btn-outline,
+.btn-gold {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 8px 16px;
-  background: var(--green);
-  color: #fff;
-  border: none;
+  padding: 9px 16px;
   border-radius: var(--radius);
   font-size: 14px;
   font-weight: 600;
-  transition: background 0.15s;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, opacity 0.15s, color 0.15s;
+}
+
+.btn-primary {
+  background: var(--green);
+  color: #fff;
 }
 
 .btn-primary:hover {
@@ -111,17 +129,9 @@
 }
 
 .btn-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
   background: transparent;
   color: var(--green);
   border: 1.5px solid var(--green);
-  border-radius: var(--radius);
-  font-size: 14px;
-  font-weight: 600;
-  transition: background 0.15s, color 0.15s;
 }
 
 .btn-outline:hover {
@@ -129,20 +139,16 @@
 }
 
 .btn-gold {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
   background: var(--gold);
   color: #fff;
-  border: none;
-  border-radius: var(--radius);
-  font-size: 14px;
-  font-weight: 600;
-  transition: opacity 0.15s;
 }
 
-.btn-gold:hover {
+.btn-gold:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.btn-gold:not(:disabled):hover {
   opacity: 0.88;
 }
 
@@ -153,4 +159,13 @@
   color: var(--green);
   font-size: 14px;
   font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .btn-primary,
+  .btn-outline,
+  .btn-gold {
+    flex: 1;
+    font-size: 13px;
+  }
 }

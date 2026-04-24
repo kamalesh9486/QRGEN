@@ -20,6 +20,12 @@
   --font-mono: 'JetBrains Mono', 'Fira Mono', monospace;
 }
 
+html {
+  /* Prevent font size inflation on mobile */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 html, body {
   background: var(--bg);
   color: var(--text);
@@ -27,17 +33,29 @@ html, body {
   font-size: 15px;
   line-height: 1.6;
   min-height: 100vh;
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
 }
 
 #root {
   min-height: 100vh;
 }
 
+/* Make tap targets comfortable on touch devices */
+button, select, input[type="date"], input[type="time"] {
+  min-height: 40px;
+}
+
 button {
   font-family: var(--font-sans);
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 input, textarea, select {
   font-family: var(--font-sans);
+}
+
+img, canvas, svg {
+  max-width: 100%;
 }

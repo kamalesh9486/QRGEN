@@ -27,25 +27,21 @@ export default function Layout() {
               onClick={() => setTab('create')}
             >
               <i className="bi bi-plus-circle" />
-              Generate QR
+              <span>Generate QR</span>
             </button>
             <button
               className={`layout-tab${tab === 'history' ? ' active' : ''}`}
               onClick={() => setTab('history')}
             >
               <i className="bi bi-clock-history" />
-              History
+              <span>History</span>
             </button>
           </nav>
         </div>
       </header>
 
       <main className="layout-main">
-        {tab === 'create' ? (
-          <CreatePage />
-        ) : (
-          <HistoryPage />
-        )}
+        {tab === 'create' ? <CreatePage /> : <HistoryPage />}
       </main>
     </div>
   )
