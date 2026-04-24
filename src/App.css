@@ -1,0 +1,43 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #edf2f0;
+  --surface: #ffffff;
+  --border: #d0d8d4;
+  --text: #1c1c1e;
+  --text-muted: #5a6660;
+  --green: #007560;
+  --green-dark: #004937;
+  --gold: #ca8a04;
+  --green-light: #e6f2ee;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --font-sans: 'Dubai', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Mono', monospace;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: var(--font-sans);
+}
