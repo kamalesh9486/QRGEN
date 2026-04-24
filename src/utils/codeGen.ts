@@ -1,7 +1,18 @@
+const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+
+function randomSuffix(): string {
+  let s = ''
+  for (let i = 0; i < 4; i++) {
+    s += CHARS[Math.floor(Math.random() * CHARS.length)]
+  }
+  return s
+}
+
 export function generateCode(date: string, existingCodes: string[]): string {
-  const base = `TRN-${date.replace(/-/g, '')}`
-  if (!existingCodes.includes(base)) return base
-  let suffix = 2
-  while (existingCodes.includes(`${base}-${suffix}`)) suffix++
-  return `${base}-${suffix}`
+  let code = `TRN-${date.replace(/-/g, '')}-${randomSuffix()}`
+  // Extremely unlikely collision guard
+  while (existingCodes.includes(code)) {
+    code = `TRN-${date.replace(/-/g, '')}-${randomSuffix()}`
+  }
+  return code
 }
